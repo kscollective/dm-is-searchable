@@ -28,7 +28,7 @@ module DataMapper
 
       module ClassMethods
         def search(search_options = {}, options = {})
-          docs = repository(@search_repository) { self.all(search_options) }
+          docs = self.all(:search.like => "%#{search_options[:search]}%") 
           ids = docs.collect { |doc| doc[:id] }
           self.all(options.merge(key.first => ids))
         end
