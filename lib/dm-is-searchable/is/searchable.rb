@@ -28,7 +28,11 @@ module DataMapper
 
       module ClassMethods
         def search(search_options = {}, options = {})
-          docs = self.all(:search.like => "%#{search_options[:search]}%") 
+          # Took this out and scoping to search repo. I feel like this might have been working before this change?
+          #docs = self.all(:search.like => "%#{search_options[:search]}%") 
+          docs = respository(@search_repository) {
+            self.all(:search.like => "%#{search_options[:search]}%") 
+          }
           ids = docs.collect { |doc| doc[:id] }
           self.all(options.merge(key.first => ids))
         end
